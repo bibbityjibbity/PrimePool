@@ -1,7 +1,8 @@
 #ifndef COINSHIELD_LLP_CORE_H
 #define COINSHIELD_LLP_CORE_H
 
-#include "bignum.h"
+#include "hash/uint1024.h"
+#include "hash/templates.h"
 #include "util.h"
 #ifdef WIN32
 #include <mpir.h>
@@ -31,6 +32,38 @@ namespace Core
 
 	/** Global Best Height Tracker. Keeps track of Current Block. **/
 	extern unsigned int nBestHeight;
+	
+	/** Mock Class for Building Block Hash. **/
+	class CBlock
+	{
+	public:
+
+		/** Begin of Header.   BEGIN(nVersion) **/
+		unsigned int  nVersion;
+		uint1024 hashPrevBlock;
+		uint512 hashMerkleRoot;
+		unsigned int  nChannel;
+		unsigned int   nHeight;
+		unsigned int     nBits;
+		uint64          nNonce;
+		/** End of Header.     END(nNonce). 
+			All the components to build an SK1024 Block Hash. **/
+		
+		
+		CBlock()
+		{
+			nVersion        = 0;
+			hashPrevBlock   = 0;
+			hashMerkleRoot  = 0;
+			nChannel        = 0;
+			nHeight         = 0;
+			nBits           = 0;
+			nNonce          = 0;
+		}
+		
+		inline uint1024 GetHash() const { return SK1024(BEGIN(nVersion), END(nBits)); }
+		inline uint1024 GetPrime() const { return GetHash() + nNonce; }
+	};
 
 	/** Pool Configuration **/
 	extern Config CONFIG; 
@@ -75,20 +108,12 @@ namespace Core
 	/** --------- PRIME.CPP ----------- **/
 	void InitializePrimes();
 	
+	uint1024 FermatTest(uint1024 n);
 	unsigned int SetBits(double nDiff);
-	unsigned int GetPrimeBits(CBigNum prime, int checks);
-	unsigned int GetFractionalDifficulty(CBigNum composite);
+	unsigned int GetFractionalDifficulty(uint1024 composite);
 	
 	double GetDifficulty(unsigned int nBits);
-	double VerifyPrimeDifficulty(CBigNum prime, int checks);
-	double CheckPrimeDifficulty(CBigNum prime);
-	double GmpVerification(CBigNum prime);
-	
-	CBigNum FermatTest(CBigNum n, CBigNum a);
-	bool Miller_Rabin(CBigNum n, int checks);
-	bool PrimeCheck(CBigNum test, int checks);
-	
-	
+	double GmpVerification(uint1024 prime);
 	
 	
 	/** --------- CORE.CPP ----------- **/

@@ -6,15 +6,6 @@
 #include <iostream>
 
 
-#ifndef OPENSSL_HACK
-#define OPENSSL_HACK
-#ifndef __cdecl
-#define __cdecl __attribute__((__cdecl__))
-#endif
-FILE _iob[] = { *stdin, *stdout, *stderr };
-extern "C" FILE * __cdecl __iob_func(void) { return _iob; }
-#endif
-
 int main(int argc, char *argv[])
 {
 	Core::CONFIG.ReadConfig();

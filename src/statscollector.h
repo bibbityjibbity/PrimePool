@@ -2,9 +2,9 @@
 #define NEXUS_STATS_H
 
 #include <string>
-#include <mutex>
-
-#include "bignum.h"
+#include "json/json_spirit_reader_template.h"
+#include "json/json_spirit_writer_template.h"
+#include <boost/serialization/list.hpp>
 #include "util.h"
 #ifdef WIN32
 #include <mpir.h>

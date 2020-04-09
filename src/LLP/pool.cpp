@@ -333,7 +333,7 @@ namespace LLP
 			
 			//Timer GMP_TIMER;
 			//GMP_TIMER.Start();
-			double nDifficulty = Core::GmpVerification(CBigNum(hashPrime));
+			double nDifficulty = Core::GmpVerification(hashPrime);
 			//GMP_TIMER.Stop();
 			
 			if(Core::SetBits(nDifficulty) >= Core::nMinimumShare)
